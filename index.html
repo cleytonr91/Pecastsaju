@@ -3,198 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyundai Parts - Painel de Controle</title>
+    <title>Hyundai Parts - Gestão de Vendas</title>
     <style>
-        :root { --navy: #002C5F; --blue: #0072BC; --gold: #A39161; --silver: #E5E5E5; --success: #28a745; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 15px; color: #333; }
-        .main-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
+        :root { --navy: #002C5F; --blue: #0072BC; --gold: #A39161; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
         
-        /* Sidebar Estilizada */
-        .sidebar { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid var(--navy); height: fit-content; }
-        h2, h4 { color: var(--navy); margin-top: 0; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .input-group { margin-bottom: 15px; }
+        /* Lateral */
+        .sidebar { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 6px solid var(--navy); height: fit-content; }
+        h2 { color: var(--navy); font-size: 1.2rem; text-align: center; margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 11px; font-weight: bold; color: var(--navy); margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--blue); box-shadow: 0 0 5px rgba(0,114,188,0.2); }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
         .btn-venda { background: var(--blue); }
-        .btn-venda:hover { background: var(--navy); }
         .btn-encomenda { background: var(--gold); }
-        
-        /* Cards de Conteúdo */
-        .content-area { display: flex; flex-direction: column; gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .scroll { max-height: 350px; overflow-y: auto; border-radius: 4px; border: 1px solid #f0f0f0; }
-        
+        .btn:active { transform: scale(0.98); }
+
+        /* Metas */
+        .meta-card { background: var(--navy); color: white; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
+        #totalVendas { font-size: 1.5rem; font-weight: bold; display: block; margin-top: 5px; }
+
+        /* Tabelas */
+        .content { display: flex; flex-direction: column; gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        h3 { margin: 0 0 15px 0; font-size: 1rem; color: var(--navy); border-bottom: 2px solid var(--bg); padding-bottom: 8px; }
+        .table-wrapper { max-height: 300px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #eee; position: sticky; top: 0; z-index: 10; }
-        td { padding: 12px; border-bottom: 1px solid #f5f5f5; }
-        
-        /* Dashboard */
-        .meta-box { background: var(--navy); color: white; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center; }
-        .meta-box label { color: var(--silver); margin-bottom: 8px; }
-        #txtTotal { font-size: 26px; font-weight: bold; color: #fff; display: block; }
-        
-        .status-badge { font-size: 11px; text-align: center; margin-top: 12px; font-weight: bold; padding: 5px; border-radius: 4px; background: #f8f9fa; }
-        
-        @media (max-width: 850px) { .main-container { grid-template-columns: 1fr; } }
+        th { background: #f8f9fa; position: sticky; top: 0; padding: 10px; text-align: left; border-bottom: 2px solid #eee; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+
+        .status { font-size: 11px; text-align: center; margin-top: 10px; font-weight: bold; }
+        @media (max-width: 800px) { .container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="main-container">
+<div class="container">
     <div class="sidebar">
-        <h2>Hyundai</h2>
-        <div class="input-group">
-            <label>TIPO DE REGISTRO</label>
-            <select id="tipo" onchange="alternarInterface()">
+        <h2>HYUNDAI PARTS</h2>
+        <div class="form-group">
+            <label>TIPO DE LANÇAMENTO</label>
+            <select id="tipo" onchange="mudarForm()">
                 <option value="VENDA">Venda Realizada</option>
                 <option value="ENCOMENDA">Nova Encomenda</option>
             </select>
         </div>
+        <div class="form-group"><label id="labelData">DATA DA VENDA</label><input type="date" id="dataOp"></div>
         
-        <div class="input-group"><label id="labelData">DATA DA VENDA</label><input type="date" id="dataOp"></div>
-        
-        <div id="sessaoEncomenda" style="display:none; background: #fffcf0; padding: 12px; border: 1px dashed var(--gold); border-radius: 8px; margin-bottom: 15px;">
-            <div class="input-group"><label>NOME DO CLIENTE</label><input type="text" id="cliente" placeholder="Ex: João Silva"></div>
-            <div class="input-group"><label>PREVISÃO DE CHEGADA</label><input type="date" id="dataPrev"></div>
+        <div id="extraEncomenda" style="display:none; background: #fff9e6; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px dashed var(--gold);">
+            <div class="form-group"><label>CLIENTE</label><input type="text" id="cliente" placeholder="Nome do cliente"></div>
+            <div class="form-group"><label>PREVISÃO CHEGADA</label><input type="date" id="dataPrev"></div>
         </div>
 
-        <div class="input-group"><label>VALOR (R$)</label><input type="number" id="valor" step="0.01" placeholder="0.00"></div>
-        <div class="input-group"><label>OBSERVAÇÃO / PEÇA</label><input type="text" id="obs" placeholder="Peça ou Detalhes"></div>
+        <div class="form-group"><label>VALOR (R$)</label><input type="number" id="valor" step="0.01" placeholder="0,00"></div>
+        <div class="form-group"><label>OBSERVAÇÃO / PEÇA</label><input type="text" id="obs" placeholder="Ex: Lanterna Traseira"></div>
         
-        <button id="btnSalvar" class="btn btn-venda" onclick="salvarLançamento()">Enviar Dados</button>
-        <div id="statusSinc" class="status-badge">🟢 Sistema Pronto</div>
+        <button id="btnAcao" class="btn btn-venda" onclick="enviar()">Salvar na Planilha</button>
+        <div id="msgStatus" class="status" style="color: #666;">🔵 Sistema Online</div>
 
-        <div class="meta-box">
-            <label>TOTAL ACUMULADO</label>
-            <span id="txtTotal">R$ 0,00</span>
+        <div class="meta-card">
+            <label>TOTAL VENDIDO (META)</label>
+            <span id="totalVendas">R$ 0,00</span>
         </div>
-        <button onclick="buscarDados()" style="background:none; border:1px solid #ddd; color:#999; font-size:10px; margin-top:15px; cursor:pointer; width:100%; padding:8px; border-radius:6px;">🔄 ATUALIZAR PAINEL GERAL</button>
     </div>
 
-    <div class="content-area">
-        <div class="card" style="border-left: 6px solid var(--blue);">
-            <h4>📦 VENDAS REALIZADAS (META)</h4>
-            <div class="scroll">
-                <table><thead><tr><th>Data</th><th>Valor</th><th>Obs</th></tr></thead><tbody id="listaVendas"></tbody></table>
+    <div class="content">
+        <div class="card">
+            <h3>📦 ÚLTIMAS VENDAS</h3>
+            <div class="table-wrapper">
+                <table><thead><tr><th>Data</th><th>Valor</th><th>Observação</th></tr></thead><tbody id="corpoVendas"></tbody></table>
             </div>
         </div>
 
-        <div class="card" style="border-left: 6px solid var(--gold);">
-            <h4>📝 ENCOMENDAS PENDENTES</h4>
-            <div class="scroll">
-                <table><thead><tr><th>Pedido</th><th>Previsão</th><th>Cliente</th><th>Valor</th><th>Peça</th></tr></thead><tbody id="listaEnc"></tbody></table>
+        <div class="card">
+            <h3>🚚 ENCOMENDAS PENDENTES</h3>
+            <div class="table-wrapper">
+                <table><thead><tr><th>Pedido</th><th>Previsão</th><th>Cliente</th><th>Valor</th></tr></thead><tbody id="corpoEnc"></tbody></table>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // URL OFICIAL FORNECIDO PELO USUÁRIO
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdPf0ASV2sNphRyVpe-ytXCy7VvQX_4BoatPHDw8n4Av2M-zdKMLCUBxXntJQlUs9e/exec";
+    // URL DA SUA PLANILHA ATUALIZADO
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfvjmIR5M8kSpXOvGujwFgwzMluq7lJ4aKRJRISXLBK7iRa5gSsi3yfa2WTUhcPZi2mQ/exec";
 
     window.onload = () => {
         const hoje = new Date().toISOString().split('T')[0];
         document.getElementById('dataOp').value = hoje;
         document.getElementById('dataPrev').value = hoje;
-        buscarDados();
+        atualizarPainel();
     };
 
-    function alternarInterface() {
-        const isEnc = document.getElementById('tipo').value === 'ENCOMENDA';
-        document.getElementById('sessaoEncomenda').style.display = isEnc ? 'block' : 'none';
-        document.getElementById('labelData').innerText = isEnc ? 'DATA DO PEDIDO' : 'DATA DA VENDA';
-        document.getElementById('btnSalvar').className = isEnc ? 'btn btn-encomenda' : 'btn btn-venda';
-        document.getElementById('btnSalvar').innerText = isEnc ? 'Registrar Encomenda' : 'Registrar Venda';
+    function mudarForm() {
+        const e = document.getElementById('tipo').value === 'ENCOMENDA';
+        document.getElementById('extraEncomenda').style.display = e ? 'block' : 'none';
+        document.getElementById('labelData').innerText = e ? 'DATA DO PEDIDO' : 'DATA DA VENDA';
+        document.getElementById('btnAcao').className = e ? 'btn btn-encomenda' : 'btn btn-venda';
     }
 
-    async function salvarLançamento() {
-        const v = document.getElementById('valor').value;
-        const d = document.getElementById('dataOp').value;
-        if(!v || !d) return alert("Preencha data e valor corretamente!");
+    async function enviar() {
+        const valor = document.getElementById('valor').value;
+        if (!valor || valor <= 0) return alert("Digite um valor válido.");
 
-        const st = document.getElementById('statusSinc');
-        st.innerText = "⏳ ENVIANDO...";
-        st.style.color = "#f39c12";
+        const status = document.getElementById('msgStatus');
+        status.innerText = "⏳ ENVIANDO...";
+        status.style.color = "orange";
 
-        const payload = {
+        const dados = {
             tipo: document.getElementById('tipo').value,
-            dataOp: d,
-            valor: parseFloat(v),
+            dataOp: document.getElementById('dataOp').value,
+            valor: parseFloat(valor),
             obs: document.getElementById('obs').value || "---",
             cliente: document.getElementById('cliente').value || "---",
             dataPrev: document.getElementById('dataPrev').value
         };
 
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            st.innerText = "✅ LANÇAMENTO REALIZADO!";
-            st.style.color = "var(--success)";
-            
-            // Limpa formulário
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dados) });
+            status.innerText = "✅ SUCESSO!";
+            status.style.color = "green";
             document.getElementById('valor').value = "";
             document.getElementById('obs').value = "";
-            document.getElementById('cliente').value = "";
-            
-            setTimeout(buscarDados, 1500);
-        } catch (e) {
-            st.innerText = "❌ ERRO AO CONECTAR";
-            st.style.color = "red";
+            setTimeout(atualizarPainel, 1000);
+        } catch (err) {
+            status.innerText = "❌ ERRO AO SALVAR";
+            status.style.color = "red";
         }
     }
 
-    async function buscarDados() {
-        const st = document.getElementById('statusSinc');
-        st.innerText = "🔄 SINCRONIZANDO...";
-        
+    async function atualizarPainel() {
+        document.getElementById('msgStatus').innerText = "🔄 ATUALIZANDO...";
         try {
-            const res = await fetch(WEB_APP_URL);
-            const dados = await res.json();
+            const res = await fetch(SCRIPT_URL);
+            const json = await res.json();
             
-            const tabV = document.getElementById('listaVendas');
-            const tabE = document.getElementById('listaEnc');
+            const tabV = document.getElementById('corpoVendas');
+            const tabE = document.getElementById('corpoEnc');
             tabV.innerHTML = ""; tabE.innerHTML = "";
-            let somaTotal = 0;
+            let soma = 0;
 
-            if(dados.vendas) {
-                dados.vendas.forEach(r => {
-                    const valor = parseFloat(r[1]) || 0;
-                    somaTotal += valor;
-                    const row = tabV.insertRow(0);
-                    row.innerHTML = `<td>${formatarData(r[0])}</td><td style="font-weight:bold; color:var(--success)">R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td><td>${r[2]}</td>`;
+            if (json.vendas) {
+                json.vendas.reverse().forEach(r => {
+                    soma += parseFloat(r[1]) || 0;
+                    tabV.insertRow().innerHTML = `<td>${fmtData(r[0])}</td><td style="font-weight:bold;color:green">R$ ${r[1].toLocaleString('pt-BR', {minimumFractionDigits:2})}</td><td>${r[2]}</td>`;
+                });
+            }
+            if (json.encomendas) {
+                json.encomendas.reverse().forEach(r => {
+                    tabE.insertRow().innerHTML = `<td>${fmtData(r[0])}</td><td>${fmtData(r[1])}</td><td style="font-weight:bold">${r[2]}</td><td>R$ ${r[3].toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>`;
                 });
             }
 
-            if(dados.encomendas) {
-                dados.encomendas.forEach(r => {
-                    const row = tabE.insertRow(0);
-                    row.innerHTML = `<td>${formatarData(r[0])}</td><td>🚚 ${formatarData(r[1])}</td><td style="font-weight:bold">${r[2]}</td><td>R$ ${parseFloat(r[3]).toLocaleString('pt-BR',{minimumFractionDigits:2})}</td><td>${r[4]}</td>`;
-                });
-            }
-
-            document.getElementById('txtTotal').innerText = "R$ " + somaTotal.toLocaleString('pt-BR', {minimumFractionDigits:2});
-            st.innerText = "🟢 PAINEL ATUALIZADO";
-            st.style.color = "var(--success)";
+            document.getElementById('totalVendas').innerText = "R$ " + soma.toLocaleString('pt-BR', {minimumFractionDigits:2});
+            document.getElementById('msgStatus').innerText = "🟢 SINCRONIZADO";
         } catch (e) {
-            st.innerText = "⚠️ MODO OFFLINE";
-            console.error(e);
+            document.getElementById('msgStatus').innerText = "⚠️ SEM CONEXÃO";
         }
     }
 
-    function formatarData(data) {
-        if(!data) return "---";
-        const d = new Date(data);
+    function fmtData(iso) {
+        if (!iso) return "---";
+        const d = new Date(iso);
         return d.toLocaleDateString('pt-BR', {timeZone: 'UTC'}).slice(0,5);
     }
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
